@@ -714,6 +714,91 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"a0t4e":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _firstJs = require("./js/first.js");
+var _firstJsDefault = parcelHelpers.interopDefault(_firstJs);
+
+},{"./js/first.js":"keKpn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"keKpn":[function(require,module,exports,__globalThis) {
+const form = document.getElementById("contactForm");
+const list = document.getElementById("contactList");
+let contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+let editIndex = null;
+function renderContacts() {
+    list.innerHTML = "";
+    contacts.forEach((contact, index)=>{
+        const li = document.createElement("li");
+        li.textContent = `${contact.name} ${contact.surname} | ${contact.phone} | ${contact.email}`;
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "\u0412\u0438\u0434\u0430\u043B\u0438\u0442\u0438";
+        deleteBtn.addEventListener("click", ()=>{
+            contacts.splice(index, 1);
+            saveAndRender();
+        });
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "\u0420\u0435\u0434\u0430\u0433\u0443\u0432\u0430\u0442\u0438";
+        editBtn.addEventListener("click", ()=>{
+            document.getElementById("name").value = contact.name;
+            document.getElementById("surname").value = contact.surname;
+            document.getElementById("phone").value = contact.phone;
+            document.getElementById("email").value = contact.email;
+            editIndex = index;
+        });
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
+        list.appendChild(li);
+    });
+}
+function saveAndRender() {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+    renderContacts();
+}
+form.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const newContact = {
+        name: form.name.value,
+        surname: form.surname.value,
+        phone: form.phone.value,
+        email: form.email.value
+    };
+    if (editIndex === null) contacts.push(newContact);
+    else {
+        contacts[editIndex] = newContact;
+        editIndex = null;
+    }
+    form.reset();
+    saveAndRender();
+});
+renderContacts();
+
+},{}],"jnFvT":[function(require,module,exports,__globalThis) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequired096", {})
 
